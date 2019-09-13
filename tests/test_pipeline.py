@@ -10,7 +10,7 @@ class TestPipeline(AsyncTestCase):
 
     def setUp(self):
         super(TestPipeline, self).setUp()
-        self.client = Client(io_loop=self.io_loop)
+        self.client = Client()
         self.client.connect(callback=self.stop)
         self.wait()
         self.client.flushdb(callback=self.stop)

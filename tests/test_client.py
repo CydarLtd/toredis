@@ -7,7 +7,7 @@ class TestClient(AsyncTestCase):
     """ Test the client """
 
     def test_connect(self):
-        client = Client(io_loop=self.io_loop)
+        client = Client()
         result = {}
 
         def callback():
@@ -20,7 +20,7 @@ class TestClient(AsyncTestCase):
 
     @gen.engine
     def test_set_command(self):
-        client = Client(io_loop=self.io_loop)
+        client = Client()
         result = {}
 
         def set_callback(response):
@@ -41,7 +41,7 @@ class TestClient(AsyncTestCase):
 
     @gen.engine
     def test_get_command(self):
-        client = Client(io_loop=self.io_loop)
+        client = Client()
         result = None
 
         def get_callback(response):
@@ -62,7 +62,7 @@ class TestClient(AsyncTestCase):
 
     @gen.engine
     def test_sub_command(self):
-        client = Client(io_loop=self.io_loop)
+        client = Client()
         result = {"message_count": 0}
         conn = Client()
         conn.connect()
@@ -85,7 +85,7 @@ class TestClient(AsyncTestCase):
         self.assertTrue(result["message"], "new message 99!")
 
     def test_pub_command(self):
-        client = Client(io_loop=self.io_loop)
+        client = Client()
         result = {}
 
         def pub_callback(response):
@@ -99,7 +99,7 @@ class TestClient(AsyncTestCase):
         self.assertEqual(result["pub"], 0)  # no subscribers yet
 
     def test_blpop(self):
-        client = Client(io_loop=self.io_loop)
+        client = Client()
         result = {}
 
         def rpush_callback(response):
@@ -117,14 +117,14 @@ class TestClient(AsyncTestCase):
         self.assertEqual(result["pop"], [b"test", b"dummy"])
 
     def test_disconnect(self):
-        client = Client(io_loop=self.io_loop)
+        client = Client()
         client.connect()
         client.close()
         with self.assertRaises(IOError):
             client._stream.read_bytes(1024, lambda x: x)
 
     def test_pubsub_disconnect(self):
-        client = Client(io_loop=self.io_loop)
+        client = Client()
         client.connect()
         client.subscribe("foo", lambda: None)
         client.close()

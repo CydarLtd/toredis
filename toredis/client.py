@@ -21,15 +21,10 @@ class Client(RedisCommandsMixin):
     """
         Redis client class
     """
-    def __init__(self, io_loop=None):
+    def __init__(self):
         """
             Constructor
-
-            :param io_loop:
-                Optional IOLoop instance
         """
-        self._io_loop = io_loop or IOLoop.instance()
-
         self._stream = None
 
         self.reader = None
@@ -186,10 +181,11 @@ class Client(RedisCommandsMixin):
     def _connect(self, sock, addr, callback):
         self._reset()
 
-        self._stream = IOStream(sock, io_loop=self._io_loop)
+        self._stream = IOStream(sock)
 
         def _stream_connect_callback():
-            callback()
+            if callback is not None:
+                callback()
 
             self._stream.read_until_close(self._on_close, self._on_read)
 
